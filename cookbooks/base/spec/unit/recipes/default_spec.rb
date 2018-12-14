@@ -42,5 +42,25 @@ describe 'base::default' do
     it 'should remove apache' do
       expect(chef_run).to remove_package 'apache2'
     end
+
+    it 'should create a docker user' do
+      expect(chef_run).to create_user 'docker'
+    end
+
+    it 'should create a chris user' do
+      expect(chef_run).to create_user 'chris'
+    end
+
+    it 'should create a docker group' do
+      expect(chef_run).to create_group 'docker'
+    end
+
+    it 'should mount UserData' do
+      expect(chef_run).to mount_mount('/media/UserData/')
+    end
+
+    it 'should enable UserData' do
+      expect(chef_run).to enable_mount('/media/UserData/')
+    end
   end
 end

@@ -20,3 +20,31 @@ package 'lm-sensors'
 package 'apache2' do
   action [:remove]
 end
+
+user 'docker' do
+  comment "A user to run docker with"
+  shell "/bin/bash"
+  password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
+  action [:create]
+end
+
+user 'chris' do
+  comment "A main user"
+  shell "/bin/zsh"
+  gid "sudo"
+  password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
+  action [:create]
+end
+
+group 'docker' do
+  append true
+  members ['docker', 'chris']
+end
+
+if node[:chef_environment] === 'production'
+  mount '/media/UserData/' do
+    device '/dev/pandora-vg/media'
+    fstype 'ext4'
+    action [:mount, :enable]
+  end
+end

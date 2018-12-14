@@ -24,3 +24,17 @@ end
 describe package('lm-sensors') do
   it { should be_installed }
 end
+
+describe package('apache2') do
+  it { should_not be_installed }
+end
+
+describe user('docker') do
+  it { should exist }
+  its('group') { should eq 'docker' }
+end
+
+describe user('chris') do
+  it { should exist }
+  its('groups') { should eq ['sudo', 'docker']}
+end
