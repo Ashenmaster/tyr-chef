@@ -21,11 +21,10 @@ package 'apache2' do
   action [:remove]
 end
 
-user 'docker' do
+user 'cgray' do
   comment "A user to run docker with"
   shell "/bin/bash"
   password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
-  action [:create]
 end
 
 user 'chris' do
@@ -33,15 +32,15 @@ user 'chris' do
   shell "/bin/zsh"
   gid "sudo"
   password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
-  action [:create]
 end
 
 group 'docker' do
   append true
-  members ['docker', 'chris']
+  members ['cgray', 'chris']
 end
 
-if node[:chef_environment] === 'production'
+if node[:chef_environment] === 'production' && File.read('/etc/mtab').lines.grep('/media/UserData')
+else
   mount '/media/UserData/' do
     device '/dev/pandora-vg/media'
     fstype 'ext4'
