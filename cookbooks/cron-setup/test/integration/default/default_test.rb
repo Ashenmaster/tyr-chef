@@ -1,6 +1,6 @@
 # # encoding: utf-8
 
-# Inspec test for recipe cron::default
+# Inspec test for recipe cron-setup::default
 
 # The Inspec reference, with examples and extensive documentation, can be
 # found at http://inspec.io/docs/reference/resources/
@@ -13,6 +13,10 @@ unless os.windows?
 end
 
 # This is an example test, replace it with your own test.
-describe port(80), :skip do
-  it { should_not be_listening }
+describe crontab('root') do
+  its('commands') { should include 'chef-client' }
+end
+
+describe crontab('root').commands('chef-client') do
+  its('hours') { should cmp '*' }
 end

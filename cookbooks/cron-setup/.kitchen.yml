@@ -1,6 +1,8 @@
 ---
 driver:
-  name: vagrant
+  name: docker
+  privileged: false
+  use_sudo: false
 
 provisioner:
   name: chef_zero
@@ -8,18 +10,22 @@ provisioner:
   # For example:
   #   always_update_cookbooks: <%= !ENV['CI'] %>
   always_update_cookbooks: true
+  product_name: chef
 
 verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-16.04
-  - name: centos-7
-
+  - name: ubuntu-18.04
+    driver_config:
+          image: ubuntu:18.04
+          platform: ubuntu
+          run_command: /sbin/init
+          privileged: true
 suites:
   - name: default
     run_list:
-      - recipe[cron::default]
+      - recipe[cron-setup::default]
     verifier:
       inspec_tests:
         - test/integration/default

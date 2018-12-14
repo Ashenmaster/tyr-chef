@@ -1,4 +1,4 @@
-node_name "vagrant-4bce4c2a"
+node_name "vagrant-48784ab4"
 file_cache_path    "/var/chef/cache"
 file_backup_path   "/var/chef/backup"
 cookbook_path ["/vagrant//7b7c58405dfde6c0200c4fc4d59849e6/cookbooks", "/vagrant/cookbooks"]

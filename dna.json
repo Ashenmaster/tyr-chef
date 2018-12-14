@@ -1,2 +1,5 @@
 {
+  "run_list": [
+    "recipe[cron-setup]"
+  ]
 }

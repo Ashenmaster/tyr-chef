@@ -1,12 +1,12 @@
 #
-# Cookbook:: cron
+# Cookbook:: cron-setup
 # Spec:: default
 #
 # Copyright:: 2018, The Authors, All Rights Reserved.
 
 require 'spec_helper'
 
-describe 'cron::default' do
+describe 'cron-setup::default' do
   context 'When all attributes are default, on Ubuntu 16.04' do
     let(:chef_run) do
       # for a complete list of available platforms and versions see:
@@ -18,18 +18,24 @@ describe 'cron::default' do
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
-  end
 
-  context 'When all attributes are default, on CentOS 7.4.1708' do
-    let(:chef_run) do
-      # for a complete list of available platforms and versions see:
-      # https://github.com/customink/fauxhai/blob/master/PLATFORMS.md
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '7.4.1708')
-      runner.converge(described_recipe)
+    it 'should install cron' do
+      expect(chef_run).to install_package('cron')
     end
 
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
+    it 'should enable cron' do
+      expect(chef_run).to enable_service('cron')
     end
+
+    it 'should start cron' do
+      expect(chef_run).to enable_service('cron')
+    end
+
+    it 'should create a cron' do
+      expect(chef_run).to create_cron('chef-pull').with(time: :hourly)
+    end
+    # it 'should create the crontab file' do
+    #   expect(chef_run).to render_file('/var/spool/cron/crontabs')
+    # end
   end
 end
