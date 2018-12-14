@@ -16,3 +16,7 @@ end
 
 # Install lm-sensors
 package 'lm-sensors'
+
+package 'apache2' do
+  action [:remove]
+end

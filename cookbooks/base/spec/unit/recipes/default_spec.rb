@@ -38,5 +38,9 @@ describe 'base::default' do
     it 'should install lm-sensors' do
       expect(chef_run).to install_package 'lm-sensors'
     end
+
+    it 'should remove apache' do
+      expect(chef_run).to remove_package 'apache2'
+    end
   end
 end
