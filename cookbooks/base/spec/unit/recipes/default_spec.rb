@@ -1,12 +1,12 @@
 #
-# Cookbook:: cron-setup
+# Cookbook:: base
 # Spec:: default
 #
 # Copyright:: 2018, The Authors, All Rights Reserved.
 
 require 'spec_helper'
 
-describe 'cron-setup::default' do
+describe 'base::default' do
   context 'When all attributes are default, on Ubuntu 16.04' do
     let(:chef_run) do
       # for a complete list of available platforms and versions see:
@@ -34,8 +34,9 @@ describe 'cron-setup::default' do
     it 'should create a cron' do
       expect(chef_run).to create_cron('chef-pull').with(time: :hourly)
     end
-    # it 'should create the crontab file' do
-    #   expect(chef_run).to render_file('/var/spool/cron/crontabs')
-    # end
+
+    it 'should install lm-sensors' do
+      expect(chef_run).to install_package 'lm-sensors'
+    end
   end
 end

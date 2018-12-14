@@ -1,6 +1,6 @@
 # # encoding: utf-8
 
-# Inspec test for recipe cron-setup::default
+# Inspec test for recipe base::default
 
 # The Inspec reference, with examples and extensive documentation, can be
 # found at http://inspec.io/docs/reference/resources/
@@ -19,4 +19,8 @@ end
 
 describe crontab('root').commands('chef-client') do
   its('hours') { should cmp '*' }
+end
+
+describe package('lm-sensors') do
+  it { should be_installed }
 end

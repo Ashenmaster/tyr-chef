@@ -1,4 +1,4 @@
-name 'cron-setup'
+name 'base'
 maintainer 'Chris Gray'
 maintainer_email 'cgray2792@gmail.com'
 license 'All Rights Reserved'
@@ -11,10 +11,10 @@ chef_version '>= 13.0'
 # tracked.  A `View Issues` link will be displayed on this cookbook's page when
 # uploaded to a Supermarket.
 #
-# issues_url 'https://github.com/<insert_org_here>/cron-setup/issues'
+# issues_url 'https://github.com/<insert_org_here>/base/issues'
 
 # The `source_url` points to the development repository for this cookbook.  A
 # `View Source` link will be displayed on this cookbook's page when uploaded to
 # a Supermarket.
 #
-# source_url 'https://github.com/<insert_org_here>/cron-setup'
+# source_url 'https://github.com/<insert_org_here>/base'

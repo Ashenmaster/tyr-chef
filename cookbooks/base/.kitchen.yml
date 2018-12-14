@@ -25,7 +25,7 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[cron-setup::default]
+      - recipe[base::default]
     verifier:
       inspec_tests:
         - test/integration/default
