@@ -70,7 +70,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "chef_solo" do |chef|
       chef.provisioning_path = "/vagrant/"
       chef.run_list = [
-          'recipe[base::default]'
+          'recipe[base::default]',
+          'recipe[docker-setup::default]'
       ]
   end
 end

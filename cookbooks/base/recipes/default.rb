@@ -22,7 +22,7 @@ package 'apache2' do
 end
 
 user 'cgray' do
-  comment "A user to run docker with"
+  comment "A user to run docker-setup with"
   shell "/bin/bash"
   password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
 end
@@ -39,7 +39,7 @@ group 'docker' do
   members ['cgray', 'chris']
 end
 
-if node[:chef_environment] === 'production' && File.read('/etc/mtab').lines.grep('/media/UserData')
+if node[:chef_environment] != 'production' || File.read('/etc/mtab').lines.grep('/media/UserData')
 else
   mount '/media/UserData/' do
     device '/dev/pandora-vg/media'
