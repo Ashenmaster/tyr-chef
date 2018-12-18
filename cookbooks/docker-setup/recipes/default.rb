@@ -29,3 +29,18 @@ execute 'docker up' do
     user 'cgray'
   end
 end
+
+package 'ddclient'
+
+template '/etc/ddclient.conf' do
+  source 'etc_ddclient.conf.erb'
+  owner 'root'
+  group 'root'
+  mode '0600'
+  variables domains: {
+      'base' => '@',
+      'vpn' => 'vpn',
+      'remote' => 'remote'
+  }
+  verify 'ddclient'
+end

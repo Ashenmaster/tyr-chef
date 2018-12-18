@@ -30,5 +30,17 @@ describe 'docker-setup::default' do
     it 'should run docker-compose up' do
       expect(chef_run).to run_execute('docker up')
     end
+
+    it 'should install ddclient' do
+      expect(chef_run).to install_package('ddclient')
+    end
+
+    it 'should create the ddclient.conf file from template' do
+      expect(chef_run).to create_template('/etc/ddclient.conf').with(
+          user:   'root',
+          group:  'root',
+          mode: '0600'
+      )
+    end
   end
 end

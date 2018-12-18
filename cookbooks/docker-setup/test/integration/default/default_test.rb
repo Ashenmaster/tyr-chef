@@ -135,3 +135,7 @@ describe docker_container('openVPN') do
   it { should be_running }
   its('image') { should eq 'linuxserver/openvpn-as:152' }
 end
+
+describe file('/etc/ddclient.conf') do
+  it { should exist }
+end
