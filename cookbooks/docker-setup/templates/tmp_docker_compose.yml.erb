@@ -305,6 +305,7 @@ services:
       HOST_ETC: /rootfs/etc
       HOST_SYS: /rootfs/etc
     volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /sys:/rootfs/sys:ro
       - /proc:/rootfs/proc:ro

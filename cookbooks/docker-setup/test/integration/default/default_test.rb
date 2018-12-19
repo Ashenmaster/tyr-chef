@@ -4,6 +4,9 @@
 
 # The Inspec reference, with examples and extensive documentation, can be
 # found at http://inspec.io/docs/reference/resources/
+describe file('/tmp/docker-compose.yml') do
+  it { should exist }
+end
 
 describe docker.version do
   its('Server.Version') { should cmp >= '1.12'}

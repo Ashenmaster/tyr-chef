@@ -25,6 +25,20 @@ template '/tmp/docker-compose.yml' do
   }
 end
 
+# Copy telegraf config
+template "#{configs['environment']['userDir']}telegraf.conf" do
+  source "user_dir_telegraf.conf.erb"
+end
+
+# Upload openVPN config files
+cookbook_file "#{configs['environment']['userDir']}docker/openvpn/config/etc/as.conf" do
+  source 'as.conf'
+end
+
+cookbook_file "#{configs['environment']['userDir']}docker/openvpn/config/etc/config.json" do
+  source 'config.json'
+end
+
 
 execute 'docker up' do
   command 'COMPOSE_HTTP_TIMEOUT=200 docker-compose -f /tmp/docker-compose.yml up -d'
