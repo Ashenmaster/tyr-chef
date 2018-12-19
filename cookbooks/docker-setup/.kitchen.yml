@@ -31,7 +31,3 @@ suites:
       inspec_tests:
         - test/integration/default
     attributes:
-      network:
-        interfaces:
-          default_interface:
-            "enp0s3"

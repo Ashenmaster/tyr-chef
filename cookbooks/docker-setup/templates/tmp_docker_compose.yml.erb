@@ -25,7 +25,7 @@ services:
       - &puid PUID=1001
       - &pgid PGID=999
       - EMAIL=cgray2792@gmail.com
-      - URL=tyr.vin
+      - URL=<%= node["fqdn"] %>
       <% @composeConfigs["configs"]["letsencrypt"].each do |label, subdomains| %>
       - SUBDOMAINS=<%= subdomains.map { |domain| domain.to_s }.join(",") %>
       <% end %>

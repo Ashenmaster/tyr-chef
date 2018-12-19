@@ -12,16 +12,19 @@ end
 
 package 'docker-compose'
 
-# cookbook_file '/tmp/docker-compose.yml' do
-#   source 'docker-compose.yml'
-#   if node[:name] != 'main'
-#     owner 'root'
-#   else
-#     owner 'cgray'
-#   end
-#   group 'docker'
-#   action :create
-# end
+template '/tmp/docker-compose.yml' do
+  source 'tmp_docker_compose.yml.erb'
+  if node[:name] != 'main'
+    owner 'root'
+  else
+    owner 'cgray'
+  end
+  group 'docker'
+  variables composeConfigs: {
+      "configs" => configs
+  }
+end
+
 
 execute 'docker up' do
   command 'COMPOSE_HTTP_TIMEOUT=200 docker-compose -f /tmp/docker-compose.yml up -d'
@@ -43,18 +46,5 @@ template '/etc/ddclient.conf' do
       'base' => '@',
       'vpn' => 'vpn',
       'remote' => 'remote'
-  }
-end
-
-template '/tmp/docker_compose.yml' do
-  source 'tmp_docker_compose.yml.erb'
-  if node[:name] != 'main'
-    owner 'root'
-  else
-    owner 'cgray'
-  end
-  group 'docker'
-  variables composeConfigs: {
-      "configs" => configs
   }
 end
