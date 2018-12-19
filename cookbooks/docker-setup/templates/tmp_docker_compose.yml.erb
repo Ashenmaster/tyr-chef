@@ -1,0 +1,332 @@
+version: "2.1"
+services:
+  letsencrypt:
+    image: linuxserver/letsencrypt:185
+    restart: always
+    depends_on:
+      - portainer
+      - qbittorrent
+      - nzbget
+      - radarr
+      - sonarr
+      - lidarr
+      - plexms
+      - tautulli
+      - ombi
+      - hydra2
+    container_name: letsencrypt-proxy
+    healthcheck:
+      test: curl --write-out '%{http_code}\n' --silent --output /dev/null http://localhost || exit 1
+      timeout: 10s
+      retries: 3
+    volumes:
+      - /opt/appdata/letsencrypt/config:/config
+    environment:
+      - &puid PUID=1001
+      - &pgid PGID=999
+      - EMAIL=cgray2792@gmail.com
+      - URL=tyr.vin
+      <% @composeConfigs["configs"]["letsencrypt"].each do |label, subdomains| %>
+      - SUBDOMAINS=<%= subdomains.map { |domain| domain.to_s }.join(",") %>
+      <% end %>
+      - &tz TZ="Europe/London"
+      - VALIDATION=http
+    ports:
+      - "80:80"
+      - "443:443"
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  portainer:
+    image: portainer/portainer:develop
+    container_name: portainer
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/portainer/data:/data
+    ports:
+      - "8100:9000"
+    environment:
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  qbittorrent:
+    image: linuxserver/qbittorrent:105
+    container_name: qbittorrent
+    volumes:
+      - ${USERDIR}/docker/qbittorrent:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
+      - ${USERDIR}/docker/certs:/certs
+    ports:
+      - "8101:8101"
+      - "6881:6881"
+      - "6881:6881/udp"
+    restart: always
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+      - UMASK_SET=002
+      - WEBUI_PORT=8101
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  nzbget:
+    image: linuxserver/nzbget:149
+    container_name: nzbget
+    volumes:
+      - ${USERDIR}/docker/nzbget:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
+      - ${USERDIR}/docker/certs:/certs
+    ports:
+      - "8102:6789"
+    restart: always
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  radarr:
+    image: linuxserver/radarr:140
+    container_name: radarr
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/radarr:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>media/movies:/movies
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
+    ports:
+      - "8103:7878"
+    restart: always
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  sonarr:
+    image: linuxserver/sonarr:164
+    container_name: sonarr
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/sonarr:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>media/tv:/tv
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
+    ports:
+      - "8104:8989"
+    restart: always
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  lidarr:
+    image: linuxserver/lidarr:188
+    container_name: lidarr
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/lidarr:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>media/music:/music
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
+    ports:
+      - "8117:8686"
+    restart: always
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  mylar:
+    image: linuxserver/mylar:158
+    container_name: mylar
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/mylar:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>media/comics:/comics
+    ports:
+      - "8118:8090"
+    restart: always
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  ubooquity:
+    image: linuxserver/ubooquity:122
+    container_name: ubooquity
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/ubooquity:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>media/books:/books
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/files
+    ports:
+      - "8119:2202"
+      - "8120:2203"
+    restart: always
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  plexms:
+    container_name: plexms
+    restart: always
+    image: plexinc/pms-docker:plexpass
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/plexms:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads/plex_tmp:/transcode
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>media:/media
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
+    network_mode: host
+    environment:
+      - *tz
+      - HOSTNAME="Tyr"
+      - PLEX_UID=1001
+      - PLEX_GID=999
+      - ADVERTISE_IP="http://192.168.1.76:32400/"
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  tautulli:
+    container_name: tautulli
+    restart: always
+    image: linuxserver/tautulli:154
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/plexpy:/config
+      - /var/log/plexpy:/logs:ro
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
+    ports:
+      - "8105:8181"
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  ombi:
+    container_name: ombi
+    restart: always
+    image: linuxserver/ombi:130
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/ombi:/config
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
+    ports:
+      - "8106:3579"
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+  hydra2:
+    image: linuxserver/hydra2:115
+    container_name: hydra2
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/hydra2:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
+    ports:
+      - "8108:5076"
+    restart: always
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+  jackett:
+    image: linuxserver/jackett:329
+    container_name: jackett
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/jackett:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads/completed:/downloads
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
+    ports:
+      - "8109:9117"
+    restart: always
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  watchtower:
+    container_name: watchtower
+    restart: always
+    image: v2tec/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --schedule "0 0 4 * * *" --cleanup --label-enable
+
+  influxdb:
+    image: influxdb:1.7
+    container_name: influxdb
+    ports:
+      - "8111:8086"
+    volumes:
+      - /opt/appdata/influxdb:/var/lib/influxdb
+    restart: always
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  grafana:
+    image: grafana/grafana:5.3.4
+    container_name: grafana
+    user: "472"
+    healthcheck:
+      test: curl --write-out '%{http_code}\n' --silent --output /dev/null http://localhost:3000 || exit 1
+      timeout: 10s
+      retries: 3
+    ports:
+      - "8112:3000"
+    restart: always
+    environment:
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana
+      - GF_SERVER_DOMAIN=tyr.vin
+    depends_on:
+      - influxdb
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  telegraf:
+    container_name: telegraf
+    restart: always
+    image: telegraf:1.8
+    ports:
+      - "8113:8125/udp"
+      - "8114:8092"
+      - "8115:8094/udp"
+    depends_on:
+      - influxdb
+    environment:
+      HOST_PROC: /rootfs/proc
+      HOST_ETC: /rootfs/etc
+      HOST_SYS: /rootfs/etc
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /sys:/rootfs/sys:ro
+      - /proc:/rootfs/proc:ro
+      - /etc:/rootfs/etc:ro
+      - /:/rootfs
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+  openvpn:
+    container_name: openVPN
+    image: linuxserver/openvpn-as:152
+    network_mode: host
+    privileged: true
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/openvpn/config:/config
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+      - INTERFACE=<%= node['network']['default_interface']%>
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+volumes:
+  db:
+  grafana-storage:
+  fbdata:

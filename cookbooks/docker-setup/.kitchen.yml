@@ -26,7 +26,12 @@ suites:
   - name: default
     run_list:
       - recipe[docker-setup::default]
+    data_bags_path: "test/data_bags"
     verifier:
       inspec_tests:
         - test/integration/default
     attributes:
+      network:
+        interfaces:
+          default_interface:
+            "enp0s3"

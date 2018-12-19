@@ -1,0 +1,13 @@
+{
+  "id" : "configs",
+  "environment": {
+    "mediaDir": "/media/UserData/",
+    "userDir": "/home/docker/"
+  },
+  "letsencrypt" : {
+    "subdomains" : [
+      "vpn",
+      "remote"
+    ]
+  }
+}

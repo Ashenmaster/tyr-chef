@@ -4,22 +4,24 @@
 #
 # Copyright:: 2018, The Authors, All Rights Reserved.
 
+configs = data_bag_item('docker-config', 'configs')
+
 docker_service 'default' do
   action [:create, :start]
 end
 
 package 'docker-compose'
 
-cookbook_file '/tmp/docker-compose.yml' do
-  source 'docker-compose.yml'
-  if node[:name] != 'main'
-    owner 'root'
-  else
-    owner 'cgray'
-  end
-  group 'docker'
-  action :create
-end
+# cookbook_file '/tmp/docker-compose.yml' do
+#   source 'docker-compose.yml'
+#   if node[:name] != 'main'
+#     owner 'root'
+#   else
+#     owner 'cgray'
+#   end
+#   group 'docker'
+#   action :create
+# end
 
 execute 'docker up' do
   command 'COMPOSE_HTTP_TIMEOUT=200 docker-compose -f /tmp/docker-compose.yml up -d'
@@ -42,5 +44,17 @@ template '/etc/ddclient.conf' do
       'vpn' => 'vpn',
       'remote' => 'remote'
   }
-  verify 'ddclient'
+end
+
+template '/tmp/docker_compose.yml' do
+  source 'tmp_docker_compose.yml.erb'
+  if node[:name] != 'main'
+    owner 'root'
+  else
+    owner 'cgray'
+  end
+  group 'docker'
+  variables composeConfigs: {
+      "configs" => configs
+  }
 end
