@@ -1,14 +1,213 @@
 {
-  "id" : "configs",
+  "id": "configs",
   "environment": {
     "mediaDir": "/media/",
     "userDir": "/home/docker/"
   },
-  "letsencrypt" : {
-    "subdomains" : [
-      "vpn",
-      "remote",
-      "chef"
-    ]
+  "letsencrypt": {
+      "vpn": {
+        "protocol": "https",
+        "ip": "192.168.1.76",
+        "port": "943",
+        "config": [
+          "proxy_set_header   Host               $host;",
+          "proxy_set_header   X-Real-IP          $remote_addr;",
+          "proxy_set_header   X-Forwarded-For    $proxy_add_x_forwarded_for;",
+          "proxy_set_header   X-Forwarded-Proto  $scheme;",
+          "proxy_set_header Upgrade $http_upgrade;",
+          "proxy_set_header Connection \"upgrade\";",
+          "proxy_max_temp_file_size 2048m;",
+          "include /config/nginx/proxy.conf;"
+        ]
+      },
+      "remote":{
+        "protocol":"https",
+        "ip": "192.168.1.76",
+        "port": "943",
+        "config": [
+          "proxy_set_header   Host               $host;",
+          "proxy_set_header   X-Real-IP          $remote_addr;",
+          "proxy_set_header   X-Forwarded-For    $proxy_add_x_forwarded_for;",
+          "proxy_set_header   X-Forwarded-Proto  $scheme;",
+          "proxy_set_header Upgrade $http_upgrade;",
+          "proxy_set_header Connection \"upgrade\";",
+          "proxy_max_temp_file_size 2048m;",
+          "include /config/nginx/proxy.conf;"
+        ]
+      },
+      "chef" : {
+        "protocol":"https",
+        "ip": "192.168.1.76",
+        "config": [
+          "proxy_set_header        Host $host;",
+          "proxy_set_header        X-Real-IP $remote_addr;",
+          "proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;",
+          "proxy_set_header        X-Forwarded-Proto $scheme;",
+          "proxy_read_timeout  90;"
+        ]
+      }
+  },
+  "nginx": {
+    "services": {
+      "portainer": {
+        "url": "/portainer/",
+        "ip": "172.18.0.1",
+        "port": "8100/",
+        "settings": [
+          "proxy_set_header Connection \"\";",
+          "include /config/nginx/proxy.conf;"
+        ]
+      },
+      "portainer_websocket": {
+        "url": "/portainer/api/websocket/",
+        "ip": "172.18.0.1",
+        "port": "8100/api/websocket/",
+        "settings": [
+          "proxy_set_header Upgrade $http_upgrade;",
+          "proxy_set_header Connection \"upgrade\";",
+          "include /config/nginx/proxy.conf;"
+        ]
+      },
+      "qbit": {
+        "url": "/qbit/",
+        "ip": "172.18.0.1",
+        "port": "8101/",
+        "settings": [
+          "proxy_set_header   X-Forwarded-Host  http://172.18.0.1:8101/;",
+          "proxy_hide_header  Referer;",
+          "proxy_hide_header  Origin;",
+          "proxy_set_header   Referer          \"\";",
+          "proxy_set_header   Origin           \"\";",
+          "add_header X-Frame-Options \"SAMEORIGIN\";"
+        ]
+      },
+      "nzbget": {
+        "url": "/nzbget/",
+        "ip": "172.18.0.1",
+        "port": "8102/",
+        "settings": [
+          "proxy_http_version 1.1;",
+          "proxy_set_header Connection \"\";"
+        ]
+      },
+      "radarr": {
+        "url": "/radarr",
+        "ip": "172.18.0.1",
+        "port": "8103",
+        "settings": [
+          "proxy_set_header Host $host;",
+          "proxy_set_header X-Real-IP $remote_addr;",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
+        ]
+      },
+      "sonarr": {
+        "url": "/sonarr",
+        "ip": "172.18.0.1",
+        "port": "8104",
+        "settings": [
+          "proxy_set_header Host $host;",
+          "proxy_set_header X-Real-IP $remote_addr;",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
+        ]
+      },
+      "plexpy": {
+        "url": "/plexpy",
+        "ip": "172.18.0.1",
+        "port": "8105",
+        "settings": [
+          "proxy_set_header Host $host;",
+          "proxy_set_header X-Real-IP $remote_addr;",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
+        ]
+      },
+      "ombi": {
+        "url": "/ombi",
+        "ip": "172.18.0.1",
+        "port": "8106",
+        "settings": [
+          "proxy_set_header Host $host;",
+          "proxy_set_header X-Forwarded-Host $server_name;",
+          "proxy_set_header X-Real-IP $remote_addr;",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;",
+          "proxy_set_header X-Forwarded-Ssl on;",
+          "proxy_set_header X-Forwarded-Proto $scheme;",
+          "proxy_read_timeout  90;",
+          "proxy_redirect http://ombi https://$host;"
+        ]
+      },
+      "hydra": {
+        "url": "/hydra/",
+        "ip": "172.18.0.1",
+        "port": "8108/hydra/",
+        "settings": [
+          "proxy_set_header        X-Real-IP        $remote_addr;",
+          "proxy_set_header        Host             $host;",
+          "proxy_set_header        Scheme           $scheme;",
+          "proxy_set_header        X-Forwarded-For  $proxy_add_x_forwarded_for;",
+          "proxy_set_header        X-Forwarded-Proto $scheme;",
+          "proxy_set_header        X-Forwarded-Host $host;",
+          "proxy_redirect off;"
+        ]
+      },
+      "jackett": {
+        "url": "/jackett",
+        "protocol": "https",
+        "ip": "172.18.0.1",
+        "port": "8109",
+        "settings": [
+          "proxy_set_header Host $host;",
+          "proxy_set_header X-Real-IP $remote_addr;",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
+        ]
+      },
+      "grafana": {
+        "url": "/grafana",
+        "ip": "172.18.0.1",
+        "port": "8112/",
+        "settings": [
+          "rewrite ^/grafana/(.*) /$1 break;",
+          "proxy_set_header Connection \"\";",
+          "include /config/nginx/proxy.conf;"
+        ]
+      },
+      "lidarr": {
+        "url": "/lidarr",
+        "ip": "172.18.0.1",
+        "port": "8117",
+        "settings": [
+          "proxy_set_header Host $host;",
+          "proxy_set_header X-Real-IP $remote_addr;",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
+        ]
+      },
+      "mylar": {
+        "url": "/mylar",
+        "ip": "172.18.0.1",
+        "port": "8118",
+        "settings": [
+          "proxy_set_header Host $host;",
+          "proxy_set_header X-Real-IP $remote_addr;",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
+        ]
+      },
+      "books": {
+        "url": "/books",
+        "ip": "172.18.0.1",
+        "port": "8119",
+        "settings": [
+          "proxy_set_header Host $host;"
+        ]
+      },
+      "library": {
+        "url": "/library",
+        "ip": "172.18.0.1",
+        "port": "8121",
+        "settings": [
+          "proxy_set_header Host $host",
+          "proxy_set_header X-Real-IP $remote_addr",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for"
+        ]
+      }
+    }
   }
 }

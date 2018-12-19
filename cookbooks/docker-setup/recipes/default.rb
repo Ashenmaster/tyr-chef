@@ -39,14 +39,27 @@ cookbook_file "#{configs['environment']['userDir']}docker/openvpn/config/etc/con
   source 'config.json'
 end
 
+# Copy Nginx root config file
 
-execute 'docker up' do
-  command 'COMPOSE_HTTP_TIMEOUT=200 docker-compose -f /tmp/docker-compose.yml up -d'
-  if node[:name] != 'main'
-    user 'root'
-  else
-    user 'cgray'
+template '/opt/appdata/letsencrypt/config/nginx/site-confs/default' do
+  source "opt_appdata_letsencrypt_config_nginx_site-confs_default.conf.erb"
+  variables composeConfigs: {
+      "configs" => configs
+  }
+end
+
+configs['letsencrypt'].each {|domain, settings|
+  template "/opt/appdata/letsencrypt/config/nginx/site-confs/#{domain}" do
+      source "opt_appdata_letsencrypt_config_nginx_site-confs_template.conf.erb"
+      variables nginxConfigs: {
+          "domain" => domain,
+          "settings" => settings
+      }
   end
+}
+
+cookbook_file '/opt/appdata/letsencrypt/config/nginx/proxy.conf' do
+  source "proxy.conf"
 end
 
 package 'ddclient'
@@ -59,6 +72,17 @@ template '/etc/ddclient.conf' do
   variables domains: {
       'base' => '@',
       'vpn' => 'vpn',
-      'remote' => 'remote'
+      'remote' => 'remote',
+      'chef' => 'chef'
   }
 end
+
+execute 'docker up' do
+  command 'COMPOSE_HTTP_TIMEOUT=200 docker-compose -f /tmp/docker-compose.yml up -d'
+  if node[:name] != 'main'
+    user 'root'
+  else
+    user 'cgray'
+  end
+end
+

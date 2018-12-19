@@ -26,9 +26,7 @@ services:
       - &pgid PGID=999
       - EMAIL=cgray2792@gmail.com
       - URL=<%= node["fqdn"] %>
-      <% @composeConfigs["configs"]["letsencrypt"].each do |label, subdomains| %>
-      - SUBDOMAINS=<%= subdomains.map { |domain| domain.to_s }.join(",") %>
-      <% end %>
+      - SUBDOMAINS=<%= @composeConfigs["configs"]["letsencrypt"].map { |domain, settings| domain.to_s }.join(",")%>
       - &tz TZ="Europe/London"
       - VALIDATION=http
     ports:

@@ -42,6 +42,6 @@ describe 'docker-setup::default' do
           mode: '0600'
       )
     end
-
+end
   end
 end
