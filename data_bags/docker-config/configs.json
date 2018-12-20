@@ -17,7 +17,8 @@
         "proxy_set_header Upgrade $http_upgrade;",
         "proxy_set_header Connection \"upgrade\";",
         "proxy_max_temp_file_size 2048m;",
-        "include /config/nginx/proxy.conf;"
+        "include /config/nginx/proxy.conf;",
+        "error_log /config/log/nginx/openvpn.error.log error;"
       ]
     },
     "remote":{
