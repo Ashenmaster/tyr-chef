@@ -2,7 +2,7 @@
   "id": "configs",
   "environment": {
     "mediaDir": "/media/",
-    "userDir": "/home/docker/"
+    "userDir": "/home/cgray/"
   },
   "letsencrypt": {
     "vpn": {
@@ -23,7 +23,7 @@
     "remote":{
       "protocol":"https",
       "ip": "192.168.1.76",
-      "port": "943",
+      "port": "449",
       "config": [
         "proxy_set_header   Host               $host;",
         "proxy_set_header   X-Real-IP          $remote_addr;",
@@ -38,6 +38,7 @@
     "chef" : {
       "protocol":"https",
       "ip": "192.168.1.76",
+      "port": "446",
       "config": [
         "proxy_set_header        Host $host;",
         "proxy_set_header        X-Real-IP $remote_addr;",
@@ -178,34 +179,6 @@
           "proxy_set_header Host $host;",
           "proxy_set_header X-Real-IP $remote_addr;",
           "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
-        ]
-      },
-      "mylar": {
-        "url": "/mylar",
-        "ip": "172.18.0.1",
-        "port": "8118",
-        "settings": [
-          "proxy_set_header Host $host;",
-          "proxy_set_header X-Real-IP $remote_addr;",
-          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
-        ]
-      },
-      "books": {
-        "url": "/books",
-        "ip": "172.18.0.1",
-        "port": "8119",
-        "settings": [
-          "proxy_set_header Host $host;"
-        ]
-      },
-      "library": {
-        "url": "/library",
-        "ip": "172.18.0.1",
-        "port": "8121",
-        "settings": [
-          "proxy_set_header Host $host",
-          "proxy_set_header X-Real-IP $remote_addr",
-          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for"
         ]
       }
     }

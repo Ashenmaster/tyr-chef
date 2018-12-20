@@ -34,7 +34,7 @@ server {
         <% service['settings'].each do |setting| %>
           <%= setting %>
         <% end %>
-          proxy_pass <%= 'http' || service['protocol'] %>://<%= service['ip'] %>:<%= service['port'] %>
+          proxy_pass <%= 'http' || service['protocol'] %>://<%= service['ip'] %>:<%= service['port'] %>;
       }
       <% end %>
 }

@@ -4,10 +4,11 @@ maintainer_email 'you@example.com'
 license 'All Rights Reserved'
 description 'Installs/Configures docker-setup'
 long_description 'Installs/Configures docker-setup'
-version '0.1.0'
+version '0.1.2'
 chef_version '>= 13.0'
 
 depends 'docker', '~> 4.8.0'
+depends 'ama-docker-compose', '~> 0.1.2'
 
 
 # The `issues_url` points to the location where issues for this cookbook are

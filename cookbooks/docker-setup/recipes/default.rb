@@ -4,13 +4,17 @@
 #
 # Copyright:: 2018, The Authors, All Rights Reserved.
 
+
 configs = data_bag_item('docker-config', 'configs')
 
 docker_service 'default' do
+  host ["unix:///var/run/docker.sock"]
   action [:create, :start]
 end
 
-package 'docker-compose'
+docker_compose_installation '/usr/local/bin/docker-compose' do
+  version '1.23.2'
+end
 
 template '/tmp/docker-compose.yml' do
   source 'tmp_docker_compose.yml.erb'
@@ -77,12 +81,6 @@ template '/etc/ddclient.conf' do
   }
 end
 
-execute 'docker up' do
-  command 'COMPOSE_HTTP_TIMEOUT=200 docker-compose -f /tmp/docker-compose.yml up -d'
-  if node[:name] != 'main'
-    user 'root'
-  else
-    user 'cgray'
-  end
+docker_compose_deployment '/tmp/docker-compose.yml' do
+  environment ({COMPOSE_HTTP_TIMEOUT: "200"})
 end
-

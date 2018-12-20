@@ -23,7 +23,7 @@ server {
     <% @nginxConfigs["settings"]["config"].each do |config| %>
       <%= config %>
     <% end %>
-      proxy_pass <%= @nginxConfigs["settings"]["protocol"] %>://<%= node[:ipaddress] %><%= "" || ":"+@nginxConfigs["settings"]["protocol"] %>
+      proxy_pass <%= @nginxConfigs["settings"]["protocol"] %>://<%= node[:ipaddress] %>:<%= @nginxConfigs["settings"]["port"] %>;
 
     }
 
