@@ -51,9 +51,9 @@ services:
     image: linuxserver/qbittorrent:105
     container_name: qbittorrent
     volumes:
-      - ${USERDIR}/docker/qbittorrent:/config
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/qbittorrent:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
-      - ${USERDIR}/docker/certs:/certs
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
     ports:
       - "8101:8101"
       - "6881:6881"
@@ -71,9 +71,9 @@ services:
     image: linuxserver/nzbget:149
     container_name: nzbget
     volumes:
-      - ${USERDIR}/docker/nzbget:/config
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/nzbget:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
-      - ${USERDIR}/docker/certs:/certs
+      - /opt/appdata/letsencrypt/config/etc/letsencrypt:/certs
     ports:
       - "8102:6789"
     restart: always
@@ -156,6 +156,7 @@ services:
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/ubooquity:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>media/books:/books
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>media/comics:/comics
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/files
     ports:
       - "8119:2202"
@@ -240,7 +241,7 @@ services:
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/jackett:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads/completed:/downloads
-      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
+      - /opt/appdata/letsencrypt/config/etc/letsencrypt:/certs
     ports:
       - "8109:9117"
     restart: always

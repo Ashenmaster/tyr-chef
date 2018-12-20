@@ -1,7 +1,7 @@
 {
   "id": "configs",
   "environment": {
-    "mediaDir": "/media/",
+    "mediaDir": "/media/UserData/",
     "userDir": "/home/cgray/"
   },
   "letsencrypt": {
@@ -156,9 +156,11 @@
         "ip": "172.20.0.1",
         "port": "8109",
         "settings": [
-          "proxy_set_header Host $host;",
           "proxy_set_header X-Real-IP $remote_addr;",
-          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;",
+          "proxy_set_header X-Forwarded-Proto $scheme;",
+          "proxy_set_header X-Forwarded-Host $http_host;",
+          "proxy_redirect off;"
         ]
       },
       "grafana": {
@@ -179,6 +181,39 @@
           "proxy_set_header Host $host;",
           "proxy_set_header X-Real-IP $remote_addr;",
           "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
+        ]
+      },
+      "mylar" : {
+        "url": "/mylar",
+        "ip": "172.20.0.1",
+        "port": "8118",
+        "settings": [
+          "proxy_set_header Host $host;",
+          "proxy_set_header X-Real-IP $remote_addr;",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;",
+          "proxy_set_header X-Forwarded-Proto $scheme;"
+        ]
+      },
+      "ubooquity": {
+        "url": "/ubooquity/",
+        "ip": "172.20.0.1",
+        "port": "8119",
+        "settings": [
+          "proxy_set_header Host $host;",
+          "proxy_set_header X-Real-IP $remote_addr;",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;",
+          "proxy_set_header X-Forwarded-Proto $scheme;"
+        ]
+      },
+      "ubooquity-admin": {
+        "url": "/ubooquity/admin",
+        "ip": "172.20.0.1",
+        "port": "8120",
+        "settings": [
+          "proxy_set_header Host $host;",
+          "proxy_set_header X-Real-IP $remote_addr;",
+          "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;",
+          "proxy_set_header X-Forwarded-Proto $scheme;"
         ]
       }
     }
