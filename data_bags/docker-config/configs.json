@@ -52,7 +52,7 @@
     "services": {
       "portainer": {
         "url": "/portainer/",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8100/",
         "settings": [
           "proxy_set_header Connection \"\";",
@@ -61,7 +61,7 @@
       },
       "portainer_websocket": {
         "url": "/portainer/api/websocket/",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8100/api/websocket/",
         "settings": [
           "proxy_set_header Upgrade $http_upgrade;",
@@ -71,10 +71,10 @@
       },
       "qbit": {
         "url": "/qbit/",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8101/",
         "settings": [
-          "proxy_set_header   X-Forwarded-Host  http://172.18.0.1:8101/;",
+          "proxy_set_header   X-Forwarded-Host  http://172.20.0.1:8101/;",
           "proxy_hide_header  Referer;",
           "proxy_hide_header  Origin;",
           "proxy_set_header   Referer          \"\";",
@@ -84,7 +84,7 @@
       },
       "nzbget": {
         "url": "/nzbget/",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8102/",
         "settings": [
           "proxy_http_version 1.1;",
@@ -93,7 +93,7 @@
       },
       "radarr": {
         "url": "/radarr",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8103",
         "settings": [
           "proxy_set_header Host $host;",
@@ -103,7 +103,7 @@
       },
       "sonarr": {
         "url": "/sonarr",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8104",
         "settings": [
           "proxy_set_header Host $host;",
@@ -113,7 +113,7 @@
       },
       "plexpy": {
         "url": "/plexpy",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8105",
         "settings": [
           "proxy_set_header Host $host;",
@@ -123,7 +123,7 @@
       },
       "ombi": {
         "url": "/ombi",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8106",
         "settings": [
           "proxy_set_header Host $host;",
@@ -138,7 +138,7 @@
       },
       "hydra": {
         "url": "/hydra/",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8108/hydra/",
         "settings": [
           "proxy_set_header        X-Real-IP        $remote_addr;",
@@ -153,7 +153,7 @@
       "jackett": {
         "url": "/jackett",
         "protocol": "https",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8109",
         "settings": [
           "proxy_set_header Host $host;",
@@ -163,7 +163,7 @@
       },
       "grafana": {
         "url": "/grafana",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8112/",
         "settings": [
           "rewrite ^/grafana/(.*) /$1 break;",
@@ -173,7 +173,7 @@
       },
       "lidarr": {
         "url": "/lidarr",
-        "ip": "172.18.0.1",
+        "ip": "172.20.0.1",
         "port": "8117",
         "settings": [
           "proxy_set_header Host $host;",
