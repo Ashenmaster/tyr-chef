@@ -38,3 +38,7 @@ describe user('chris') do
   it { should exist }
   its('groups') { should eq ['sudo', 'docker']}
 end
+
+describe package('nfs-kernel-server') do
+  it { should be_installed }
+end

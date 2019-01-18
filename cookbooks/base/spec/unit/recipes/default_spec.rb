@@ -44,7 +44,7 @@ describe 'base::default' do
     end
 
     it 'should create a docker user' do
-      expect(chef_run).to create_user 'docker'
+      expect(chef_run).to create_user 'cgray'
     end
 
     it 'should create a chris user' do
@@ -61,6 +61,22 @@ describe 'base::default' do
 
     it 'should enable UserData' do
       expect(chef_run).to enable_mount('/media/UserData/')
+    end
+
+    it 'should install nfs-kernel-server' do
+      expect(chef_run).to install_package 'nfs-kernel-server'
+    end
+
+    it 'should enable nfs-kernel-server' do
+      expect(chef_run).to enable_service('nfs-kernel-server')
+    end
+
+    it 'should start nfs-kernel-server' do
+      expect(chef_run).to enable_service('nfs-kernel-server')
+    end
+
+    it 'should create etc_exports file' do
+      expect(chef_run).to create_cookbook_file('/etc/exports')
     end
   end
 end

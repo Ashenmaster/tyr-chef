@@ -47,3 +47,13 @@ else
     action [:mount, :enable]
   end
 end
+
+package('nfs-kernel-server')
+
+cookbook_file '/etc/exports' do
+  source "etc_exports"
+end
+
+service 'nfs-kernel-server' do
+  action [:enable, :start]
+end
