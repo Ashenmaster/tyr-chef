@@ -160,6 +160,14 @@ endpoint = "unix:///var/run/docker.sock"
 container_names = []
 name_suffix = "_docker"
 
+[[inputs.file]]
+files = ["/var/log/speedtest/speedtest.csv"]
+data_format = "csv"
+csv_header_row_count = 1
+csv_timestamp_column = "time"
+csv_timestamp_format = "unix"
+name_suffix = "_vm"
+
 [[outputs.influxdb]]
 database = "vm_metrics"
 urls = ["http://172.20.0.1:8111"]

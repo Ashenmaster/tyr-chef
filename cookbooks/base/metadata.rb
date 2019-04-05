@@ -2,9 +2,9 @@ name 'base'
 maintainer 'Chris Gray'
 maintainer_email 'cgray2792@gmail.com'
 license 'All Rights Reserved'
-description 'Installs/Configures cron and nfs'
-long_description 'Installs/Configures nfs'
-version '0.1.1'
+description 'Installs/Configures cron and nfs where needed'
+long_description 'Installs/Configures nfs where needed'
+version '0.1.2'
 chef_version '>= 13.0'
 
 # The `issues_url` points to the location where issues for this cookbook are

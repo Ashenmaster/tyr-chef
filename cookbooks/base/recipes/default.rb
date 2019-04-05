@@ -15,28 +15,40 @@ cron 'chef-pull' do
 end
 
 # Install lm-sensors
-package 'lm-sensors'
+if node[:chef_environment] == 'production'
+  package 'lm-sensors'
+  package 'apache2' do
+    action [:remove]
+  end
 
-package 'apache2' do
-  action [:remove]
-end
+  user 'cgray' do
+    comment "A user to run docker-setup with"
+    shell "/bin/bash"
+    password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
+  end
 
-user 'cgray' do
-  comment "A user to run docker-setup with"
-  shell "/bin/bash"
-  password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
-end
+  user 'chris' do
+    comment "A main user"
+    shell "/bin/zsh"
+    gid "sudo"
+    password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
+  end
 
-user 'chris' do
-  comment "A main user"
-  shell "/bin/zsh"
-  gid "sudo"
-  password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
-end
+  group 'docker' do
+    append true
+    members ['cgray', 'chris']
+  end
 
-group 'docker' do
-  append true
-  members ['cgray', 'chris']
+  package('nfs-kernel-server')
+
+  cookbook_file '/etc/exports' do
+    source "etc_exports"
+  end
+
+  service 'nfs-kernel-server' do
+    action [:enable, :start]
+  end
+else
 end
 
 if node[:chef_environment] != 'production' || File.read('/etc/mtab').lines.grep('/media/UserData')
@@ -46,14 +58,4 @@ else
     fstype 'ext4'
     action [:mount, :enable]
   end
-end
-
-package('nfs-kernel-server')
-
-cookbook_file '/etc/exports' do
-  source "etc_exports"
-end
-
-service 'nfs-kernel-server' do
-  action [:enable, :start]
 end

@@ -1,0 +1,54 @@
+{
+  "name": "ama-docker-compose",
+  "description": "Installs/Configures ama-docker-compose",
+  "long_description": "# ama-docker-compose Cookbook\n\nThis cookbook automates installation and usage of \n[Docker Compose][compose] tool.\n\nPlease not that most of the actions - at least for 0.1.x - are executed\nregardless of current state. Even if all containers are up and running,\naction `:up` will issue a new shell command. Single-service actions \nare not yet supported either.\n\nDev branch state:\n\n[![Travis branch](https://img.shields.io/travis/ama-team/cookbook-docker-compose/dev.svg?style=flat-square)](https://travis-ci.org/ama-team/cookbook-docker-compose)\n\n## Requirements\n\n### Platforms\n\n- Ubuntu LTS 14.04+\n- Debian 7+\n- Fedora 21+\n- Centos 6.5+\n\nShould work on other Linux distros as well, but we don't \nhave enough time to set up kitchen grounds for all cases. Should work\non Mac as well but never tested.\n\n### Chef\n\n- Chef 12.0 or later\n\n### Cookbooks\n\nThis cookbook doesn't have any dependencies on other cookbooks.\n\n## Attributes\n\nAttributes are used to set default values only.\n\n| Key                                 | Default  |\n|:------------------------------------|:---------|\n| `['ama-docker-compose']['version']` | `1.16.1` |\n\n## Recipes\n\nYou can skip some burden and include `default` recipe to install \nversion specified in attribute in default location \n(`/usr/local/bin/docker-compose`).\n\n## Resources\n\n### docker_compose_installation\n\nInstalls Docker Compose, latest version (known by cookbook) by default.\n\nExamples:\n\n```ruby\ndocker_compose_installation '/usr/local/bin/docker-compose'\n```\n\n```ruby\ndocker_compose_installation 'default' do\n  version '1.10.1' \n  path '/usr/local/bin/docker-compose'\nend\n```\n\nAvailable actions are `:create`/`:install` and `:delete`/`:remove`,\n`path` attribute defaults to resource name, `version` attribute\ndefaults to `node['ama-docker-compose']['version']`. I can't promise\nit will always be up to date, though.\n\n### docker_compose_deployment\n\nThis resource operates with docker composition (named as deployment for\nclarity), running commands as up, down, kill and others against set of\ndocker-compose files.\n\nExamples:\n\n```ruby\n# Runs up command against  specified file\ndocker_compose_deployment '/srv/router/docker-compose.yml'\n```\n\n```ruby\ndocker_compose_deployment '/srv/router/docker-compose.yml' do\n  environment({COMPOSE_PROJECT_NAME: 'my_custom_name'})\nend\n```\n\n```ruby\ndocker_compose_deployment 'router' do\n  executable '/usr/local/bin/docker-compose'\n  files '/srv/router/docker-compose.yml'\n  signal 'SIGHUP'\n  action :kill\nend\n```\n\n```ruby\ndocker_compose_deployment 'router' do\n  files ['/srv/router/docker-compose.yml', '/srv/router/docker-compose-overrides.yml']\n  timeout 10\n  action :stop\nend\n```\n\nAttributes:\n\n| Attribute | Types | Default | Description |\n|:----------------|:---|:---|:---|\n| `files`         | String / String[] | Resource name                   | Single or multiple paths to configuration files |\n| `executable`    | String            | `/usr/local/bin/docker-compose` | Path to specific docker-compose executable      |\n| `timeout`       | Integer / Nil     | `10`                            | Timeout for internal docker-compose commands where applicable |\n| `shell_timeout` | Integer / Nil     | `300`                           | Timeout for any underlying command to prevent infinite stalling | \n| `signal`        | String            | `SIGKILL`                       | Signal for kill command |\n| `scale`         | String            |                                 | Arguments for docker-compose scale command e.g. `nginx=2`|\n| `environment`   | Hash / Nil        | `{}`                            | Arbitrary environment variables to be passed to docker-compose call\n\nAvailable actions are:\n\n| Action     | Description                                          |\n|:-----------|:-----------------------------------------------------|\n| `:create`  | Maps to same docker-compose command                  |\n| `:start`   | Maps to same docker-compose command                  |\n| `:stop`    | Maps to same docker-compose command                  |\n| `:delete`  | Alias for `:rm` to preserve standard Chef action set |\n| `:rm`      | Maps to same docker-compose command                  |\n| `:restart` | Maps to same docker-compose command                  |\n| `:pull`    | Maps to same docker-compose command                  |\n| `:push`    | Maps to same docker-compose command                  |\n| `:up`      | Maps to same docker-compose command                  |\n| `:down`    | Maps to same docker-compose command                  |\n| `:kill`    | Maps to same docker-compose command                  |\n| `:scale`   | Maps to same docker-compose command                  |\n\n\nPlease note that those actions are always executed (at least, for now),\nsince it is difficult to check whether all containers are up, killed, \nstopped or anything else regarding state of deployment. However, you \ncan always use guard files that, if present, would guarantee action\nhas been executed.\n\n## Contributing\n\n1. Fork the repository on Github\n2. Create a named feature branch (like `add_component_x`)\n3. Write your change\n4. Write tests for your change (if applicable)\n5. Run the tests, ensuring they all pass\n6. Submit a Pull Request to `dev` branch using Github\n\n## License and Authors\n\nAuthors: AMA Team / Operations  \nLicense: MIT\n\nInformation about Docker Compose authors and license can be found in\n[official github repository][github/compose].\n\n  [compose]: https://docs.docker.com/compose/\n  [github/compose]: https://github.com/docker/compose\n",
+  "maintainer": "AMA Team",
+  "maintainer_email": "ops@amagroup.ru",
+  "license": "MIT",
+  "platforms": {
+    "debian": ">= 7.0",
+    "ubuntu": ">= 14.04",
+    "fedora": ">= 21.0",
+    "centos": ">= 6.5"
+  },
+  "dependencies": {
+
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "0.1.2",
+  "source_url": "https://github.com/ama-team/cookbook-docker-compose",
+  "issues_url": "https://github.com/ama-team/cookbook-docker-compose/issues",
+  "privacy": false,
+  "chef_versions": [
+
+  ],
+  "ohai_versions": [
+
+  ],
+  "gems": [
+
+  ]
+}

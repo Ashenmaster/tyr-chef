@@ -292,7 +292,7 @@ services:
   telegraf:
     container_name: telegraf
     restart: always
-    image: telegraf:1.8
+    image: telegraf:1.10
     ports:
       - "8113:8125/udp"
       - "8114:8092"
@@ -310,20 +310,7 @@ services:
       - /proc:/rootfs/proc:ro
       - /etc:/rootfs/etc:ro
       - /:/rootfs
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
-  openvpn:
-    container_name: openVPN
-    image: linuxserver/openvpn-as:152
-    network_mode: host
-    privileged: true
-    volumes:
-      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/openvpn/config:/config
-    environment:
-      - *puid
-      - *pgid
-      - *tz
-      - INTERFACE=<%= node['network']['default_interface']%>
+      - /mnt/speedtest/:/var/log/speedtest/
     labels:
       com.centurylinklabs.watchtower.enable: "true"
 volumes:

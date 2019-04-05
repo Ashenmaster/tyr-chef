@@ -8,7 +8,7 @@
     "vpn": {
       "protocol": "https",
       "ip": "192.168.1.76",
-      "port": "943",
+      "port": "11948",
       "config": [
         "proxy_set_header   Host               $host;",
         "proxy_set_header   X-Real-IP          $remote_addr;",
@@ -19,33 +19,6 @@
         "proxy_max_temp_file_size 2048m;",
         "include /config/nginx/proxy.conf;",
         "error_log /config/log/nginx/openvpn.error.log error;"
-      ]
-    },
-    "remote":{
-      "protocol":"https",
-      "ip": "192.168.1.76",
-      "port": "449",
-      "config": [
-        "proxy_set_header   Host               $host;",
-        "proxy_set_header   X-Real-IP          $remote_addr;",
-        "proxy_set_header   X-Forwarded-For    $proxy_add_x_forwarded_for;",
-        "proxy_set_header   X-Forwarded-Proto  $scheme;",
-        "proxy_set_header Upgrade $http_upgrade;",
-        "proxy_set_header Connection \"upgrade\";",
-        "proxy_max_temp_file_size 2048m;",
-        "include /config/nginx/proxy.conf;"
-      ]
-    },
-    "chef" : {
-      "protocol":"https",
-      "ip": "192.168.1.76",
-      "port": "446",
-      "config": [
-        "proxy_set_header        Host $host;",
-        "proxy_set_header        X-Real-IP $remote_addr;",
-        "proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;",
-        "proxy_set_header        X-Forwarded-Proto $scheme;",
-        "proxy_read_timeout  90;"
       ]
     }
   },

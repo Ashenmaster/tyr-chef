@@ -77,9 +77,7 @@ template '/etc/ddclient.conf' do
   mode '0600'
   variables domains: {
       'base' => '@',
-      'vpn' => 'vpn',
-      'remote' => 'remote',
-      'chef' => 'chef'
+      'vpn' => 'vpn'
   }
 end
 
