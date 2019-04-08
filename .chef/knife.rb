@@ -1,9 +1,9 @@
-# See https://docs.getchef.com/config_rb_knife.html for more information on knife configuration options
+# See http://docs.chef.io/config_rb_knife.html for more information on knife configuration options
 
 current_dir = File.dirname(__FILE__)
 log_level                :info
 log_location             STDOUT
-node_name                "chris"
-client_key               "#{current_dir}/chris.pem"
-chef_server_url          "https://remote.tyr.vin:449/organizations/hgd"
+node_name                "cgray"
+client_key               "#{current_dir}/cgray.pem"
+chef_server_url          "https://api.chef.io/organizations/hourglass"
 cookbook_path            ["#{current_dir}/../cookbooks"]

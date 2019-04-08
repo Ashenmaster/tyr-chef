@@ -34,6 +34,16 @@ services:
       - "443:443"
     labels:
       com.centurylinklabs.watchtower.enable: "true"
+  ddclient:
+    image: linuxserver/ddclient:latest
+    container_name: ddclient
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    volumes:
+      - /etc/ddclient.conf:/config/ddclient.conf
+    restart: unless-stopped
   portainer:
     image: portainer/portainer:develop
     container_name: portainer
@@ -150,6 +160,20 @@ services:
       - *tz
     labels:
       com.centurylinklabs.watchtower.enable: "true"
+  lazylibrarian:
+    image: linuxserver/lazylibrarian:latest
+    container_name: lazylibrarian
+    environment:
+      - *puid
+      - *pgid
+      - *tz
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>lazy:/config
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
+      - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>media/books:/books
+    ports:
+      - 5299:5299
+    restart: unless-stopped
   ubooquity:
     image: linuxserver/ubooquity:122
     container_name: ubooquity
@@ -310,7 +334,7 @@ services:
       - /proc:/rootfs/proc:ro
       - /etc:/rootfs/etc:ro
       - /:/rootfs
-      - /mnt/speedtest/:/var/log/speedtest/
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>speedtest/:/var/log/speedtest/
     labels:
       com.centurylinklabs.watchtower.enable: "true"
 volumes:

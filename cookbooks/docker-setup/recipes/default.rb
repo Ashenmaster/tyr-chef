@@ -68,8 +68,6 @@ cookbook_file '/opt/appdata/letsencrypt/config/nginx/proxy.conf' do
   source "proxy.conf"
 end
 
-package 'ddclient'
-
 template '/etc/ddclient.conf' do
   source 'etc_ddclient.conf.erb'
   owner 'root'
