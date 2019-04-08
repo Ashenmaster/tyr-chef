@@ -337,6 +337,16 @@ services:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>speedtest/:/var/log/speedtest/
     labels:
       com.centurylinklabs.watchtower.enable: "true"
+  jenkins:
+    image: jenkins/jenkins:lts
+    user: root
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>jenkins_home:/var/jenkins_home
+      - /usr/bin/chef-client:/usr/bin/chef-client
+
 volumes:
   db:
   grafana-storage:
