@@ -1,8 +1,10 @@
 version: "3"
 services:
   letsencrypt:
-    image: linuxserver/letsencrypt:185
+    image: linuxserver/letsencrypt:amd64-0.33.1-ls19
     restart: always
+    networks:
+      - tyr_network
     depends_on:
       - portainer
       - qbittorrent
@@ -35,8 +37,10 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
   ddclient:
-    image: linuxserver/ddclient:latest
+    image: linuxserver/ddclient:amd64-3.9.0-ls5
     container_name: ddclient
+    networks:
+      - tyr_network
     environment:
       - *puid
       - *pgid
@@ -48,6 +52,8 @@ services:
     image: portainer/portainer:develop
     container_name: portainer
     restart: always
+    networks:
+      - tyr_network
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/portainer/data:/data
@@ -58,8 +64,10 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
   qbittorrent:
-    image: linuxserver/qbittorrent:105
+    image: linuxserver/qbittorrent:amd64-4.1.5.99201904111248-6695-bad6034ubuntu18.04.1-ls17
     container_name: qbittorrent
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/qbittorrent:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
@@ -78,8 +86,10 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
   nzbget:
-    image: linuxserver/nzbget:149
+    image: linuxserver/nzbget:amd64-v20.0-ls11
     container_name: nzbget
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/nzbget:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
@@ -94,8 +104,10 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
   radarr:
-    image: linuxserver/radarr:140
+    image: linuxserver/radarr:amd64-v0.2.0.1293-ls11
     container_name: radarr
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/radarr:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
@@ -111,8 +123,10 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
   sonarr:
-    image: linuxserver/sonarr:164
+    image: linuxserver/sonarr:amd64-2.0.0.5321-ls52
     container_name: sonarr
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/sonarr:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
@@ -128,8 +142,10 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
   lidarr:
-    image: linuxserver/lidarr:188
+    image: linuxserver/lidarr:amd64-0.6.1.830-ls10
     container_name: lidarr
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/lidarr:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
@@ -145,8 +161,10 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
   mylar:
-    image: linuxserver/mylar:158
+    image: linuxserver/mylar:amd64-3f30faee-ls17
     container_name: mylar
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/mylar:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
@@ -161,8 +179,10 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
   lazylibrarian:
-    image: linuxserver/lazylibrarian:latest
+    image: linuxserver/lazylibrarian:amd64-0db0c9a8-ls94
     container_name: lazylibrarian
+    networks:
+      - tyr_network
     environment:
       - *puid
       - *pgid
@@ -175,8 +195,10 @@ services:
       - 5299:5299
     restart: unless-stopped
   ubooquity:
-    image: linuxserver/ubooquity:122
+    image: linuxserver/ubooquity:amd64-2.1.2-ls8
     container_name: ubooquity
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/ubooquity:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>media/books:/books
@@ -213,7 +235,9 @@ services:
   tautulli:
     container_name: tautulli
     restart: always
-    image: linuxserver/tautulli:154
+    image: linuxserver/tautulli:amd64-v2.1.28-ls14
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/plexpy:/config
       - /var/log/plexpy:/logs:ro
@@ -223,13 +247,15 @@ services:
     environment:
       - *puid
       - *pgid
-      - *tz
+      - TZ=Europe/London
     labels:
       com.centurylinklabs.watchtower.enable: "true"
   ombi:
     container_name: ombi
     restart: always
-    image: linuxserver/ombi:130
+    image: linuxserver/ombi:amd64-3.0.4437-ls36
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/ombi:/config
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/certs:/certs
@@ -241,10 +267,11 @@ services:
       - *tz
     labels:
       com.centurylinklabs.watchtower.enable: "true"
-
   hydra2:
-    image: linuxserver/hydra2:115
+    image: linuxserver/hydra2:amd64-v2.5.4-ls16
     container_name: hydra2
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/hydra2:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads:/downloads
@@ -258,10 +285,11 @@ services:
       - *tz
     labels:
       com.centurylinklabs.watchtower.enable: "true"
-
   jackett:
-    image: linuxserver/jackett:329
+    image: linuxserver/jackett:amd64-v0.11.228-ls19
     container_name: jackett
+    networks:
+      - tyr_network
     volumes:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker/jackett:/config
       - <%= @composeConfigs["configs"]["environment"]["mediaDir"] %>Downloads/completed:/downloads
@@ -275,17 +303,24 @@ services:
       - *tz
     labels:
       com.centurylinklabs.watchtower.enable: "true"
-  watchtower:
-    container_name: watchtower
-    restart: always
-    image: v2tec/watchtower
+  ouroboros:
+    container_name: ouroboros
+    hostname: ouroboros
+    image: pyouroboros/ouroboros
+    environment:
+      - CLEANUP=true
+      - INTERVAL=300
+      - LOG_LEVEL=info
+      - SELF_UPDATE=true
+      - TZ=Europe/London
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --schedule "0 0 4 * * *" --cleanup --label-enable
-
   influxdb:
     image: influxdb:1.7
     container_name: influxdb
+    networks:
+      - tyr_network
     ports:
       - "8111:8086"
     volumes:
@@ -294,8 +329,10 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
   grafana:
-    image: grafana/grafana:5.3.4
+    image: grafana/grafana:6.1.4
     container_name: grafana
+    networks:
+      - tyr_network
     user: "472"
     healthcheck:
       test: curl --write-out '%{http_code}\n' --silent --output /dev/null http://localhost:3000 || exit 1
@@ -316,6 +353,8 @@ services:
   telegraf:
     container_name: telegraf
     restart: always
+    networks:
+      - tyr_network
     image: telegraf:1.10
     ports:
       - "8113:8125/udp"
@@ -337,9 +376,25 @@ services:
       - <%= @composeConfigs["configs"]["environment"]["userDir"] %>speedtest/:/var/log/speedtest/
     labels:
       com.centurylinklabs.watchtower.enable: "true"
+  varken:
+    hostname: varken
+    image: boerderij/varken
+    networks:
+      - tyr_network
+    volumes:
+      - <%= @composeConfigs["configs"]["environment"]["userDir"] %>docker-varken/config-folder:/config
+    environment:
+      - *pgid
+      - *puid
+      - TZ=Europe/London
+    depends_on:
+      - influxdb
+    restart: unless-stopped
   jenkins:
     image: jenkins/jenkins:lts
     user: root
+    networks:
+      - tyr_network
     ports:
       - 8080:8080
       - 50000:50000
@@ -351,3 +406,7 @@ volumes:
   db:
   grafana-storage:
   fbdata:
+
+networks:
+  tyr_network:
+    driver: bridge
