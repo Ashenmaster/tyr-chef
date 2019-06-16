@@ -1,2 +1,3 @@
 /media/UserData/ 192.168.1.1/24(rw,sync,no_subtree_check)
+/media/UserData/ 192.168.1.100/24(rw,sync,no_subtree_check)
 /mnt/speedtest/ 192.168.1.70(rw,sync,no_subtree_check,no_root_squash)
