@@ -96,10 +96,11 @@ name_suffix = "_vm"
 ## By default, telegraf gather stats for all mountpoints.
 ## Setting mountpoints will restrict the stats to the specified mountpoints.
 # mount_points = ["/"]
+mount_points = ["/rootfs/media/UserData"]
 
 ## Ignore some mountpoints by filesystem type. For example (dev)tmpfs (usually
 ## present on /run, /var/run, /dev/shm or /dev).
-ignore_fs = ["tmpfs", "devtmpfs"]
+# ignore_fs = ["tmpfs", "devtmpfs"]
 name_suffix = "_vm"
 
 [[inputs.diskio]]
@@ -121,7 +122,7 @@ name_suffix = "_vm"
 
 # Read metrics about network usage
 [[inputs.net]]
-interfaces = [ "<%= node['network']['default_interface']%>" ]
+interfaces = [ "enp3s0" ]
 fielddrop = [ "icmp*", "ip*", "tcp*", "udp*" ]
 name_suffix = "_vm"
 
