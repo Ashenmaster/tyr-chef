@@ -49,7 +49,7 @@ services:
       - /etc/ddclient.conf:/config/ddclient.conf
     restart: unless-stopped
   portainer:
-    image: portainer/portainer:develop
+    image: portainer/portainer:latest
     container_name: portainer
     restart: always
     networks:
