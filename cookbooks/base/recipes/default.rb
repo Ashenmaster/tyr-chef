@@ -9,10 +9,10 @@ service 'cron' do
   action [:enable, :start]
 end
 
-cron 'chef-pull' do
-  time :hourly
-  command 'chef-client'
-end
+# cron 'chef-pull' do
+#  time :hourly
+#  command 'chef-client'
+# end
 
 # Install lm-sensors
 if node[:chef_environment] == 'production'
@@ -23,13 +23,13 @@ if node[:chef_environment] == 'production'
 
   user 'cgray' do
     comment "A user to run docker-setup with"
-    shell "/bin/bash"
+    shell "/usr/bin/zsh"
     password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
   end
 
   user 'chris' do
     comment "A main user"
-    shell "/bin/zsh"
+    shell "/usr/bin/zsh"
     gid "sudo"
     password"$1$9thzRKyt$SjqvBAvzxRPkPPCbJW0VD0"
   end
