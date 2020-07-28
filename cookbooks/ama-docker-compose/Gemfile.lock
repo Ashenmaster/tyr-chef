@@ -92,7 +92,7 @@ GEM
       sslshake (~> 1)
       thor (~> 0.19)
       train (>= 0.22.0, < 1.0)
-    json (2.0.3)
+    json (2.3.1)
     kitchen-docker (2.6.0)
       test-kitchen (>= 1.0.0)
     kitchen-inspec (0.17.0)
